@@ -25,94 +25,93 @@
 
 // Brute Force
 
-// #include <bits/stdc++.h>
-// using namespace std;
+#include <bits/stdc++.h>
+using namespace std;
 
-// class Solution {
-// public:
-//     bool hasIncreasingSubarrays(vector<int>& nums, int k) {
-//         int n = nums.size();
-//         for (int i = 0; i + 2 * k <= n; i++) {
-//             bool first = true, second = true;
+class Solution {
+public:
+    bool hasIncreasingSubarrays(vector<int>& nums, int k) {
+        int n = nums.size();
+        for (int i = 0; i + 2 * k <= n; i++) {
+            bool first = true, second = true;
             
-//             // Check first increasing subarray
-//             for (int j = i + 1; j < i + k; j++) {
-//                 if (nums[j] <= nums[j - 1]) {
-//                     first = false;
-//                     break;
-//                 }
-//             }
-//             if (!first) continue;
+            // Check first increasing subarray
+            for (int j = i + 1; j < i + k; j++) {
+                if (nums[j] <= nums[j - 1]) {
+                    first = false;
+                    break;
+                }
+            }
+            if (!first) continue;
 
-//             // Check second increasing subarray
-//             for (int j = i + k + 1; j < i + 2 * k; j++) {
-//                 if (nums[j] <= nums[j - 1]) {
-//                     second = false;
-//                     break;
-//                 }
-//             }
+            // Check second increasing subarray
+            for (int j = i + k + 1; j < i + 2 * k; j++) {
+                if (nums[j] <= nums[j - 1]) {
+                    second = false;
+                    break;
+                }
+            }
 
-//             if (second) return true;
-//         }
-//         return false;
-//     }
-// };
+            if (second) return true;
+        }
+        return false;
+    }
+};
 
-// int main() {
-//     Solution sol;
+int main() {
+    Solution sol;
 
-//     // Example input
-//     vector<int> nums = {1, 2, 3, 4, 2, 3, 4, 5};
-//     int k = 3;
+    vector<int> nums = {1, 2, 3, 4, 2, 3, 4, 5};
+    int k = 3;
 
-//     bool result = sol.hasIncreasingSubarrays(nums, k);
+    bool result = sol.hasIncreasingSubarrays(nums, k);
 
-//     cout << (result ? "true" : "false") << endl;
+    cout << (result ? "true" : "false") << endl;
 
-//     return 0;
-// }
+    return 0;
+}
 
 
 //optimal approach
 
-//  #include <bits/stdc++.h>
-// using namespace std;
+ #include <bits/stdc++.h>
+using namespace std;
 
-// class Solution {
-// public:
-//     bool hasIncreasingSubarrays(vector<int>& nums, int k) {
-//         int n = nums.size();
-//         vector<int> increasing(n + 1, 1);
+class Solution {
+public:
+    bool hasIncreasingSubarrays(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<int> increasing(n + 1, 1);
 
-//         for (int i = 1; i < n; i++) {
-//             if (nums[i] > nums[i - 1]) {
-//                 increasing[i + 1] += increasing[i];
-//             } else {
-//                 increasing[i + 1] = 1;
-//             }
-//         }
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > nums[i - 1]) {
+                increasing[i + 1] += increasing[i];
+            } else {
+                increasing[i + 1] = 1;
+            }
+        }
 
-//         for (int i = k; i <= n - k; i++) {
-//             if (increasing[i] >= k && increasing[i + k] >= k) {
-//                 return true;
-//             }
-//         }
-//         return false;
-//     }
-// };
+        for (int i = k; i <= n - k; i++) {
+            if (increasing[i] >= k && increasing[i + k] >= k) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
 
-// int main() {
-//     Solution sol;
+int main() {
+    Solution sol;
 
-//     // Example 1
-//     vector<int> nums = {1, 2, 3, 4, 2, 3, 4, 5};
-//     int k = 3;
+    // Example 1
+    vector<int> nums = {1, 2, 3, 4, 2, 3, 4, 5};
+    int k = 3;
 
-//     bool result = sol.hasIncreasingSubarrays(nums, k);
+    bool result = sol.hasIncreasingSubarrays(nums, k);
 
-//     cout << (result ? "true" : "false") << endl;
+    cout << (result ? "true" : "false") << endl;
 
-//     return 0;
-// }
+    return 0;
+}
 
 
