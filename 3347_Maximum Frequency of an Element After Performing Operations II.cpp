@@ -43,41 +43,43 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
     int maxFrequency(vector<int>& nums, int k, int numOperations) {
-        int mini = *min_element(nums.begin(), nums.end());
-        int maxi = *max_element(nums.begin(), nums.end());
-        int ans = 0;
+        int maxVal = *max_element(begin(nums), end(nums)) + k;
+        map<int, int> diff;
+        unordered_map<int, int> freq;
 
-        // Step 1: Create frequency array safely
-        vector<int> freq(maxi + 2, 0);  // +2 to handle r+1 edge cases
-        for (int i : nums)
-            freq[i]++;
+        for (int i = 0; i < nums.size(); i++) {
+            freq[nums[i]]++;
 
-        // Step 2: Prefix sum for cumulative frequency
-        for (int i = 1; i <= maxi; i++)
-            freq[i] += freq[i - 1];
+            int l = max(nums[i] - k, 0);
+            int r = min(nums[i] + k, maxVal);
 
-        // Step 3: Try each possible current number
-        for (int curr = mini; curr <= maxi; curr++) {
-            int l = max(mini, curr - k);
-            int r = min(maxi, curr + k);
+            diff[l]++;
+            diff[r + 1]--;
 
-            int f = freq[curr] - (curr > 0 ? freq[curr - 1] : 0);
-
-            int totalInRange = freq[r] - (l > 0 ? freq[l - 1] : 0);
-
-            int possibleExtra = totalInRange - f;
-
-            int extra = min(numOperations, possibleExtra);
-
-            ans = max(ans, f + extra);
+            diff[nums[i]] += 0;
         }
 
-        return ans;
+        int result = 1;
+        int cumSum = 0;
+        for (auto it = diff.begin(); it != diff.end(); it++) {
+            int target = it->first;
+            it->second += cumSum;
+
+            // diff[target] += (target > 0 ? diff[target-1] : 0);
+
+            int targetFreq = freq[target];
+            int needConversion = it->second - targetFreq;
+
+            int maxPossibleFreq = min(needConversion, numOperations);
+
+            result = max(result, targetFreq + maxPossibleFreq);
+
+            cumSum = it->second;
+        }
+
+        return result;
     }
 };

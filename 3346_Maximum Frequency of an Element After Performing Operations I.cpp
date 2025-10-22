@@ -43,3 +43,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+class Solution {
+public:
+    int maxFrequency(vector<int>& nums, int k, int numOperations) {
+        int mini = *min_element(nums.begin(), nums.end());
+        int maxi = *max_element(nums.begin(), nums.end());
+        int ans = 0;
+
+        // Step 1: Create frequency array safely
+        vector<int> freq(maxi + 2, 0);  // +2 to handle r+1 edge cases
+        for (int i : nums)
+            freq[i]++;
+
+        // Step 2: Prefix sum for cumulative frequency
+        for (int i = 1; i <= maxi; i++)
+            freq[i] += freq[i - 1];
+
+        // Step 3: Try each possible current number
+        for (int curr = mini; curr <= maxi; curr++) {
+            int l = max(mini, curr - k);
+            int r = min(maxi, curr + k);
+
+            int f = freq[curr] - (curr > 0 ? freq[curr - 1] : 0);
+
+            int totalInRange = freq[r] - (l > 0 ? freq[l - 1] : 0);
+
+            int possibleExtra = totalInRange - f;
+
+            int extra = min(numOperations, possibleExtra);
+
+            ans = max(ans, f + extra);
+        }
+
+        return ans;
+    }
+};
+
+
