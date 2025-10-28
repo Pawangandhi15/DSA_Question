@@ -1,7 +1,5 @@
 // Given an integer array nums, return the length of the longest strictly increasing subsequence.
 
- 
-
 // Example 1:
 
 // Input: nums = [10,9,2,5,3,7,101,18]
@@ -15,7 +13,6 @@
 
 // Input: nums = [7,7,7,7,7,7,7]
 // Output: 1
- 
 
 // Constraints:
 
@@ -25,20 +22,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
     int n;
     int dp[2501][2501];
 
-    int solve(vector<int>& nums, int i, int p) {
-        if (i >= n) {
+    int solve(vector<int> &nums, int i, int p)
+    {
+        if (i >= n)
+        {
             return 0;
         }
-        if (p != -1 && dp[i][p] != -1) {
+        if (p != -1 && dp[i][p] != -1)
+        {
             return dp[i][p];
         }
         int take = 0;
-        if (p == -1 || nums[p] < nums[i]) {
+        if (p == -1 || nums[p] < nums[i])
+        {
             take = 1 + solve(nums, i + 1, i);
         }
         int skip = solve(nums, i + 1, p);
@@ -47,28 +49,56 @@ public:
         return max(take, skip);
     }
 
-    int lengthOfLIS(vector<int>& nums) {
+    int lengthOfLIS(vector<int> &nums)
+    {
         n = nums.size();
         memset(dp, -1, sizeof(dp));
         return solve(nums, 0, -1);
     }
 };
 
-
-class Solution {
+class Solution
+{
 public:
-    int lengthOfLIS(vector<int>& nums) {
+    int lengthOfLIS(vector<int> &nums)
+    {
         int n = nums.size();
         int masLis = 1;
         vector<int> dp(n, 1);
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (nums[j] < nums[i])
+                {
                     dp[i] = max(dp[i], dp[j] + 1);
                     masLis = max(masLis, dp[i]);
                 }
             }
         }
         return masLis;
+    }
+};
+
+class Solution
+{
+public:
+    int lengthOfLIS(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> sorted;
+        for (int i = 0; i < n; i++)
+        {
+            auto it = lower_bound(begin(sorted), end(sorted), nums[i]);
+            if (it == end(sorted))
+            {
+                sorted.push_back(nums[i]);
+            }
+            else
+            {
+                *it = nums[i];
+            }
+        }
+        return sorted.size();
     }
 };
